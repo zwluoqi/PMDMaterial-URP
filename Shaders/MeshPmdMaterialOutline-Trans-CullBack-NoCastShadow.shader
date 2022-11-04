@@ -37,7 +37,7 @@ Shader "MMD/Transparent/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 		// Settings
 		// Settings
 		Tags{"RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"}
-		Tags { "Queue" = "Geometry+2" "RenderType" = "Transparent" }
+		Tags { "Queue" = "AlphaTest+2" "RenderType" = "Transparent" }
 
 		LOD 200
 		
@@ -49,10 +49,11 @@ Shader "MMD/Transparent/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 				Cull Back
 				ZWrite On
 				Blend SrcAlpha OneMinusSrcAlpha
-				AlphaTest Greater 0.0
+//				AlphaTest Greater 0.25
 				CGPROGRAM
 				// #pragma surface surf MMD keepalpha
-				
+								#define _UseAlphaClipping
+				#define _Cutoff 0.01
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
 				#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
@@ -68,6 +69,8 @@ Shader "MMD/Transparent/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 			Cull Front
 			Lighting Off
 			CGPROGRAM
+							#define _UseAlphaClipping
+				#define _Cutoff 0.01
 			#pragma vertex vert
 			#pragma fragment frag
 			#include "UnityCG.cginc"

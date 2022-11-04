@@ -42,7 +42,7 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack"
 		Pass{
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
-
+//			AlphaTest Greater 0.01
 
 			// Surface Shader
 			Cull Back
@@ -82,7 +82,7 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack"
        		Cull Off
         	Lighting Off
        		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
-        	AlphaTest Greater 0.25
+//        	AlphaTest Greater 0.25
         		
         	CGPROGRAM
         	#pragma vertex shadow_vert

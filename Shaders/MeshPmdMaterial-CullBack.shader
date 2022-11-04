@@ -42,6 +42,7 @@ Shader "MMD/PMDMaterial-CullBack"
 			Cull Back
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
+//			AlphaTest Greater 0.01
 
 			// Surface Shader
 			CGPROGRAM

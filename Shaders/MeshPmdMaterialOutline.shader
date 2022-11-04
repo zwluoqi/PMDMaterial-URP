@@ -45,6 +45,8 @@ Shader "MMD/PMDMaterial-with-Outline"
 
 			// Surface Shader
 			Cull Off
+//			AlphaTest Greater 0.01
+
 			CGPROGRAM
 			// #pragma surface surf MMD
 			
@@ -81,7 +83,7 @@ Shader "MMD/PMDMaterial-with-Outline"
        		Cull Off
         	Lighting Off
        		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
-        	AlphaTest Greater 0.25
+//        	AlphaTest Greater 0.25
         		
         	CGPROGRAM
         	#pragma vertex shadow_vert

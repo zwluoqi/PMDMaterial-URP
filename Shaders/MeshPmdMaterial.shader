@@ -43,6 +43,7 @@ Shader "MMD/PMDMaterial"
 			Cull Off
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
+//			AlphaTest Greater 0.01
 
 			CGPROGRAM
 			#pragma vertex vert_surf
@@ -64,7 +65,7 @@ Shader "MMD/PMDMaterial"
        		Cull Off
         	Lighting Off
        		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
-        	AlphaTest Greater 0.25
+//        	AlphaTest Greater 0.25
         		
         	CGPROGRAM
         	#pragma vertex shadow_vert

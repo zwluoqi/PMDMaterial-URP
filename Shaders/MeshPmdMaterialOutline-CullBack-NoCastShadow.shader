@@ -43,6 +43,7 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
 
+//			AlphaTest Greater 0.01
 
 				// Surface Shader
 				Cull Back

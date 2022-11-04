@@ -137,6 +137,11 @@ half4 frag_fast(v2f_surf IN): COLOR
 	half atten = LIGHT_ATTENUATION(IN);
 	half shadowAtten = SHADOW_ATTENUATION(IN);
 	BRDF(IN,brdf);
+	
+	#ifdef _UseAlphaClipping
+	clip(brdf.Alpha - _Cutoff);
+	#endif
+	
 	half4 c = LightingMMD(brdf,_WorldSpaceLightPos0.xyz,IN.viewDir,atten);
 	return c;
 }

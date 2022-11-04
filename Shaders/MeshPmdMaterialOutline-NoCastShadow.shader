@@ -42,7 +42,7 @@ Shader "MMD/PMDMaterial-with-Outline-NoCastShadow"
 		Pass{
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
-
+//			AlphaTest Greater 0.01
 
 			// Surface Shader
 			Cull Off

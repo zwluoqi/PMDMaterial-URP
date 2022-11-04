@@ -34,7 +34,7 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 	{
 		// Settings
 		Tags{"RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"}
-		Tags { "Queue" = "Geometry+2" "RenderType" = "Transparent" }
+		Tags { "Queue" = "Transparent+2" "RenderType" = "Transparent" }
 
 		LOD 200
 		
@@ -46,10 +46,11 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 				Cull Front
 				ZWrite Off
 				Blend SrcAlpha OneMinusSrcAlpha
-				AlphaTest Greater 0.0
+//				AlphaTest Greater 0
 				CGPROGRAM
 				// #pragma surface surf MMD keepalpha
-				
+								#define _UseAlphaClipping
+				#define _Cutoff 0.01
 				#pragma vertex vert_surf
 				#pragma fragment frag_fast
 				#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
@@ -65,10 +66,11 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 			Cull Back
 			ZWrite On
 			Blend SrcAlpha OneMinusSrcAlpha
-			AlphaTest Greater 0.0
+//			AlphaTest Greater 0.25
 			CGPROGRAM
 			// #pragma surface surf MMD keepalpha
-			
+							#define _UseAlphaClipping
+				#define _Cutoff 0.01
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
 			#include "MeshPmdMaterialSurface.cginc"
