@@ -40,18 +40,19 @@ Shader "MMD/PMDMaterial"
 		// First Pass
 		Pass
 		{
-			Cull Off
+
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
-//			AlphaTest Greater 0.01
+			Cull Off
+			HLSLPROGRAM
 
-			CGPROGRAM
+
+			#include "LightingPragma.hlsl"
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-			#include "MeshPmdMaterialSurface.cginc"
+			#include "MeshPmdMaterialSurface.hlsl"
 			
-			ENDCG
+			ENDHLSL
 		}
 
 		
@@ -64,15 +65,13 @@ Shader "MMD/PMDMaterial"
        		}
        		Cull Off
         	Lighting Off
-       		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
-//        	AlphaTest Greater 0.25
         		
-        	CGPROGRAM
+        	HLSLPROGRAM
         	#pragma vertex shadow_vert
         	#pragma fragment shadow_frag
-        	#include "UnityCG.cginc"
-        	#include "MeshPmdMaterialShadowVertFrag.cginc"
-        	ENDCG
+        	// //#include "UnityCG.cginc"
+        	#include "MeshPmdMaterialShadowVertFrag.hlsl"
+        	ENDHLSL
         }		
 	}
 

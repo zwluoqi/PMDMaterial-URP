@@ -47,15 +47,16 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 
 				// Surface Shader
 				Cull Back
-				CGPROGRAM
+				HLSLPROGRAM
+				#include "LightingPragma.hlsl"
+
+
+				#pragma vertex vert_surf
+				#pragma fragment frag_fast
 				
-			#pragma vertex vert_surf
-			#pragma fragment frag_fast
 				
-				// #pragma surface surf MMD
-				#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-				#include "MeshPmdMaterialSurface.cginc"
-				ENDCG
+				#include "MeshPmdMaterialSurface.hlsl"
+				ENDHLSL
 		}
 		
 		// Outline Pass
@@ -67,12 +68,12 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack-NoCastShadow"
 			Cull Front
 			Lighting Off
 			
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert 
 			#pragma fragment frag
-			#include "UnityCG.cginc"
-			#include "MeshPmdMaterialVertFrag.cginc"
-			ENDCG
+			//#include "UnityCG.cginc"
+			#include "MeshPmdMaterialVertFrag.hlsl"
+			ENDHLSL
 		}
 	}
 

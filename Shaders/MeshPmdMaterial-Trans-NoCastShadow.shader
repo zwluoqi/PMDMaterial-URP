@@ -47,15 +47,17 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 				ZWrite Off
 				Blend SrcAlpha OneMinusSrcAlpha
 //				AlphaTest Greater 0
-				CGPROGRAM
-				// #pragma surface surf MMD keepalpha
-								#define _UseAlphaClipping
+				HLSLPROGRAM
+				#include "LightingPragma.hlsl"
+
+				
+				#define _UseAlphaClipping
 				#define _Cutoff 0.01
 				#pragma vertex vert_surf
 				#pragma fragment frag_fast
-				#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-				#include "MeshPmdMaterialSurface.cginc"
-				ENDCG
+
+				#include "MeshPmdMaterialSurface.hlsl"
+				ENDHLSL
 		}
 
 		Pass{
@@ -67,14 +69,16 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 			ZWrite On
 			Blend SrcAlpha OneMinusSrcAlpha
 //			AlphaTest Greater 0.25
-			CGPROGRAM
-			// #pragma surface surf MMD keepalpha
-							#define _UseAlphaClipping
-				#define _Cutoff 0.01
+			HLSLPROGRAM
+			#include "LightingPragma.hlsl"
+
+			#define _UseAlphaClipping
+			#define _Cutoff 0.01
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#include "MeshPmdMaterialSurface.cginc"
-			ENDCG
+
+			#include "MeshPmdMaterialSurface.hlsl"
+			ENDHLSL
 		}
 
 	}

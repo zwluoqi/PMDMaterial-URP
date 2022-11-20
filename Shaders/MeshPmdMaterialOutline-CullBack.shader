@@ -46,14 +46,14 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack"
 
 			// Surface Shader
 			Cull Back
-			CGPROGRAM
-			// #pragma surface surf MMD
+			HLSLPROGRAM
+			#include "LightingPragma.hlsl"
+
 			
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-			#include "MeshPmdMaterialSurface.cginc"
-			ENDCG
+			#include "MeshPmdMaterialSurface.hlsl"
+			ENDHLSL
 		}
 		
 		// Outline Pass
@@ -64,12 +64,12 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack"
 			Cull Front
 			Lighting Off
 			
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert 
 			#pragma fragment frag
-			#include "UnityCG.cginc"
-			#include "MeshPmdMaterialVertFrag.cginc"
-			ENDCG
+			//#include "UnityCG.cginc"
+			#include "MeshPmdMaterialVertFrag.hlsl"
+			ENDHLSL
 		}
 		
 		// ShadowCast Pass
@@ -84,12 +84,12 @@ Shader "MMD/PMDMaterial-with-Outline-CullBack"
        		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
 //        	AlphaTest Greater 0.25
         		
-        	CGPROGRAM
+        	HLSLPROGRAM
         	#pragma vertex shadow_vert
         	#pragma fragment shadow_frag
-        	#include "UnityCG.cginc"
-        	#include "MeshPmdMaterialShadowVertFrag.cginc"
-        	ENDCG
+        	//#include "UnityCG.cginc"
+        	#include "MeshPmdMaterialShadowVertFrag.hlsl"
+        	ENDHLSL
         }
 	}
 

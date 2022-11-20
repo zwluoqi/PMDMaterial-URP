@@ -43,16 +43,13 @@ Shader "MMD/PMDMaterial-NoCastShadow"
 			Cull Off
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
-//			AlphaTest Greater 0.01
-
-			// Surface Shader
-			CGPROGRAM
-			
+			HLSLPROGRAM
+			#include "LightingPragma.hlsl"
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-			#include "MeshPmdMaterialSurface.cginc"
-			ENDCG
+
+			#include "MeshPmdMaterialSurface.hlsl"
+			ENDHLSL
 		}
 
 	}

@@ -47,16 +47,18 @@ Shader "MMD/Transparent/PMDMaterial-CullBack"
 				ZWrite On
 				Blend SrcAlpha OneMinusSrcAlpha
 //				AlphaTest Greater 0.25
-				CGPROGRAM
-				// #pragma surface surf MMD keepalpha
+				HLSLPROGRAM
+				#include "LightingPragma.hlsl"
+
 				
 				#define _UseAlphaClipping
 				#define _Cutoff 0.01
 				#pragma vertex vert_surf
 				#pragma fragment frag_fast
-				#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-				#include "MeshPmdMaterialSurface.cginc"
-				ENDCG
+
+				
+				#include "MeshPmdMaterialSurface.hlsl"
+				ENDHLSL
 		}
 		// ShadowCast Pass
 		Pass
@@ -70,14 +72,14 @@ Shader "MMD/Transparent/PMDMaterial-CullBack"
 			//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
 //			AlphaTest Greater 0.25
 			
-			CGPROGRAM
+			HLSLPROGRAM
 				#define _UseAlphaClipping
 				#define _Cutoff 0.01
 			#pragma vertex shadow_vert
 			#pragma fragment shadow_frag
-			#include "UnityCG.cginc"
-			#include "MeshPmdMaterialShadowVertFrag.cginc"
-			ENDCG
+			//#include "UnityCG.cginc"
+			#include "MeshPmdMaterialShadowVertFrag.hlsl"
+			ENDHLSL
 		}
 
 	}

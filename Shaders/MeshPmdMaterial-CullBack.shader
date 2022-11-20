@@ -42,15 +42,14 @@ Shader "MMD/PMDMaterial-CullBack"
 			Cull Back
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
-//			AlphaTest Greater 0.01
 
-			// Surface Shader
-			CGPROGRAM
+			HLSLPROGRAM
+			#include "LightingPragma.hlsl"
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-			#include "MeshPmdMaterialSurface.cginc"
-			ENDCG
+
+			#include "MeshPmdMaterialSurface.hlsl"
+			ENDHLSL
 
 		}
 
@@ -67,12 +66,12 @@ Shader "MMD/PMDMaterial-CullBack"
        		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
         	AlphaTest Greater 0.25
         		
-        	CGPROGRAM
+        	HLSLPROGRAM
         	#pragma vertex shadow_vert
         	#pragma fragment shadow_frag
-        	#include "UnityCG.cginc"
-        	#include "MeshPmdMaterialShadowVertFrag.cginc"
-        	ENDCG
+        	//#include "UnityCG.cginc"
+        	#include "MeshPmdMaterialShadowVertFrag.hlsl"
+        	ENDHLSL
         }
 	}
 

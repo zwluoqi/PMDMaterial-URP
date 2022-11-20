@@ -49,15 +49,15 @@ Shader "MMD/Transparent/PMDMaterial"
 			ZWrite Off
 			Blend SrcAlpha OneMinusSrcAlpha
 //			AlphaTest Greater 0.0
-			CGPROGRAM
+			HLSLPROGRAM
+			#include "LightingPragma.hlsl"
 			
-						#define _UseAlphaClipping
-				#define _Cutoff 0.01
+			#define _UseAlphaClipping
+			#define _Cutoff 0.01
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-			#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
-			#include "MeshPmdMaterialSurface.cginc"
-			ENDCG
+			#include "MeshPmdMaterialSurface.hlsl"
+			ENDHLSL
 		}
 
 		Pass{
@@ -83,16 +83,16 @@ Shader "MMD/Transparent/PMDMaterial"
 				Cull Back
 				ZWrite On
 				Blend SrcAlpha OneMinusSrcAlpha
-//				AlphaTest Greater 0.25
-				CGPROGRAM
-								#define _UseAlphaClipping
+				HLSLPROGRAM
+				#include "LightingPragma.hlsl"
+				
+				#define _UseAlphaClipping
 				#define _Cutoff 0.01
 				#pragma vertex vert_surf
 				#pragma fragment frag_fast
-				
-				// #pragma surface surf MMD keepalpha
-				#include "MeshPmdMaterialSurface.cginc"
-				ENDCG
+
+				#include "MeshPmdMaterialSurface.hlsl"
+				ENDHLSL
 
 		}
 		
@@ -108,14 +108,14 @@ Shader "MMD/Transparent/PMDMaterial"
 			//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
 //			AlphaTest Greater 0.25
 			
-			CGPROGRAM
+			HLSLPROGRAM
 							#define _UseAlphaClipping
 				#define _Cutoff 0.01
 			#pragma vertex shadow_vert
 			#pragma fragment shadow_frag
-			#include "UnityCG.cginc"
-			#include "MeshPmdMaterialShadowVertFrag.cginc"
-			ENDCG
+			//#include "UnityCG.cginc"
+			#include "MeshPmdMaterialShadowVertFrag.hlsl"
+			ENDHLSL
 		}
 
 	}
