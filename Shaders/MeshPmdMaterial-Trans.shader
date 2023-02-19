@@ -19,8 +19,8 @@ Shader "MMD/Transparent/PMDMaterial"
 {
 	Properties
 	{
-		_Color("拡散色", Color) = (1,1,1,1)
-		_Opacity("不透明度", Float) = 1.0
+		[HDR]_Color("拡散色", Color) = (1,1,1,1)
+		_Opacity("不透明度", Range(0,1)) = 1.0
 		_SpecularColor("反射色", Color) = (1,1,1)
 		_AmbColor("環境色", Color) = (1,1,1)
 		_Shininess("反射強度", Float) = 0
@@ -28,6 +28,13 @@ Shader "MMD/Transparent/PMDMaterial"
 		_ToonTex("トゥーン", 2D) = "white" {}
 		_SphereAddTex("スフィア（加算）", 2D) = "black" {}
 		_SphereMulTex("スフィア（乗算）", 2D) = "white" {}
+		_Cutoff("_Cutoff",float) = 0.01
+		[Header(Shadow mapping)]
+        _ReceiveShadowMappingAmount("_ReceiveShadowMappingAmount", Range(0,1)) = 0.65
+        _ReceiveShadowMappingPosOffset("_ReceiveShadowMappingPosOffset", Range(0,1)) = 0
+        _ShadowMapColor("_ShadowMapColor", Color) = (1,0.825,0.78)
+		[Toggle(SELFSHADOW_ON)] SELFSHADOW_ON("SELF SHADOW_ON", Float) = 0
+		
 	}
 
 	SubShader
@@ -45,56 +52,20 @@ Shader "MMD/Transparent/PMDMaterial"
 
 
 			// Surface Shader
-			Cull Front
-			ZWrite Off
+			Cull Off
+			ZWrite On
 			Blend SrcAlpha OneMinusSrcAlpha
 //			AlphaTest Greater 0.0
 			HLSLPROGRAM
 			#include "LightingPragma.hlsl"
 			
 			#define _UseAlphaClipping
-			#define _Cutoff 0.01
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
 			#include "MeshPmdMaterialSurface.hlsl"
 			ENDHLSL
 		}
 
-		Pass{
-			Name "FORWARD2"
-            Tags 
-            {
-                // IMPORTANT: don't write this line for any custom pass! else this outline pass will not be rendered by URP!
-                //"LightMode" = "UniversalForward" 
-
-                // [Important CPU performance note]
-                // If you need to add a custom pass to your shader (outline pass, planar shadow pass, XRay pass when blocked....),
-                // (0) Add a new Pass{} to your shader
-                // (1) Write "LightMode" = "YourCustomPassTag" inside new Pass's Tags{}
-                // (2) Add a new custom RendererFeature(C#) to your renderer,
-                // (3) write cmd.DrawRenderers() with ShaderPassName = "YourCustomPassTag"
-                // (4) if done correctly, URP will render your new Pass{} for your shader, in a SRP-batcher friendly way (usually in 1 big SRP batch)
-
-                // For tutorial purpose, current everything is just shader files without any C#, so this Outline pass is actually NOT SRP-batcher friendly.
-                // If you are working on a project with lots of characters, make sure you use the above method to make Outline pass SRP-batcher friendly!
-            }
-
-				// Surface Shader
-				Cull Back
-				ZWrite On
-				Blend SrcAlpha OneMinusSrcAlpha
-				HLSLPROGRAM
-				#include "LightingPragma.hlsl"
-				
-				#define _UseAlphaClipping
-				#define _Cutoff 0.01
-				#pragma vertex vert_surf
-				#pragma fragment frag_fast
-
-				#include "MeshPmdMaterialSurface.hlsl"
-				ENDHLSL
-
-		}
 		
 		// ShadowCast Pass
 		Pass
@@ -110,7 +81,7 @@ Shader "MMD/Transparent/PMDMaterial"
 			
 			HLSLPROGRAM
 							#define _UseAlphaClipping
-				#define _Cutoff 0.01
+				
 			#pragma vertex shadow_vert
 			#pragma fragment shadow_frag
 			//#include "UnityCG.cginc"

@@ -15,12 +15,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-Shader "MMD/Transparent/PMDMaterial-CullBack-NoCastShadow"
+Shader "MMD/URPPMDMaterial"
 {
 	Properties
 	{
 		[HDR]_Color("拡散色", Color) = (1,1,1,1)
-		_Opacity("不透明度", Range(0,1)) = 1.0
 		_SpecularColor("反射色", Color) = (1,1,1)
 		_AmbColor("環境色", Color) = (1,1,1)
 		_Shininess("反射強度", Float) = 0
@@ -28,20 +27,22 @@ Shader "MMD/Transparent/PMDMaterial-CullBack-NoCastShadow"
 		_ToonTex("トゥーン", 2D) = "white" {}
 		_SphereAddTex("スフィア（加算）", 2D) = "black" {}
 		_SphereMulTex("スフィア（乗算）", 2D) = "white" {}
-		_Cutoff("_Cutoff",float) = 0.01
-		[Header(Shadow mapping)]
-        _ReceiveShadowMappingAmount("_ReceiveShadowMappingAmount", Range(0,1)) = 0.65
-        _ReceiveShadowMappingPosOffset("_ReceiveShadowMappingPosOffset", Range(0,1)) = 0
-        _ShadowMapColor("_ShadowMapColor", Color) = (1,0.825,0.78)
+		
+		_M_CullMode ("_CullMode", Float) = 2.0
+        _M_SrcBlend ("_SrcBlend", Float) = 1.0
+        _M_DstBlend ("_DstBlend", Float) = 0.0
+        _M_ZWrite ("_ZWrite", Float) = 1.0
+		_M_AlphaTest("_AlphaTest",float) = 0.01
+		
 		[Toggle(SELFSHADOW_ON)] SELFSHADOW_ON("SELF SHADOW_ON", Float) = 0
 
 	}
 
 	SubShader
 	{
-		// Settings
+
 		Tags{"RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"}
-		Tags { "Queue" = "Transparent+2" "RenderType" = "Transparent" }
+		Tags { "Queue" = "Geometry+1" "RenderType" = "Opaque" }
 
 		LOD 200
 		
@@ -49,26 +50,60 @@ Shader "MMD/Transparent/PMDMaterial-CullBack-NoCastShadow"
 			Name "FORWARD"
 			Tags{"LightMode" = "UniversalForward"}
 
+			Cull [_M_CullMode]
+            Blend [_M_SrcBlend] [_M_DstBlend]//UnityEngine.Rendering.BlendMode
+            ZWrite [_M_ZWrite]
+			
 
-			// Surface Shader
-			Cull Back
-			ZWrite On
-			Blend SrcAlpha OneMinusSrcAlpha
-//			AlphaTest Greater 0.25
 			HLSLPROGRAM
 			#include "LightingPragma.hlsl"
 
-			#define _UseAlphaClipping
 			
 			#pragma vertex vert_surf
 			#pragma fragment frag_fast
-
 			#include "MeshPmdMaterialSurface.hlsl"
 			ENDHLSL
 		}
+		
+		// Outline Pass
+		Pass
+		{
+			Name "OUTLINE"
+//			Tags{"LightMode" = "UniversalForward"}
 
+			Cull Front
+			Lighting Off
+			
+			HLSLPROGRAM
+			#pragma vertex vert 
+			#pragma fragment frag
+
+			#include "MeshPmdMaterialVertFrag.hlsl"
+			ENDHLSL
+		}
+		// ShadowCast Pass
+        Pass
+       	{
+       		Name "ShadowCaster"
+            Tags
+       		{
+       			"LightMode" = "ShadowCaster"
+       		}
+       		Cull Off
+        	Lighting Off
+       		//Offset [_ShadowBias], [_ShadowBiasSlope] //使えない様なのでコメントアウト
+//        	AlphaTest Greater 0.25
+        		
+        	HLSLPROGRAM
+        	#pragma vertex shadow_vert
+        	#pragma fragment shadow_frag
+        	//#include "UnityCG.cginc"
+        	#include "MeshPmdMaterialShadowVertFrag.hlsl"
+        	ENDHLSL
+        }
 	}
 
+
 	// Other Environment
-	Fallback "Transparent/Diffuse"
+	Fallback "Diffuse"
 }

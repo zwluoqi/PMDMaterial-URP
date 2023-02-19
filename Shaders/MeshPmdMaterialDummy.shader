@@ -19,8 +19,8 @@ Shader "MMD/Dummy"
 {
 	Properties
 	{
-		_Color("拡散色", Color) = (1,1,1,1)
-		_Opacity("不透明度", Float) = 1.0
+		[HDR]_Color("拡散色", Color) = (1,1,1,1)
+		_Opacity("不透明度", Range(0,1)) = 1.0
 		_SpecularColor("反射色", Color) = (1,1,1)
 		_AmbColor("環境色", Color) = (1,1,1)
 		_Shininess("反射強度", Float) = 0

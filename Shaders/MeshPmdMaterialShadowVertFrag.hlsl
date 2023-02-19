@@ -21,9 +21,20 @@
 #define MeshPmdMaterialShadowVertFrag_INCLUDE
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
+CBUFFER_START(UnityPerMaterial)
+float4 _Color;
 float _Opacity;
+float4 _AmbColor;
+float4 _SpecularColor;
+float _Shininess;
+float _Cutoff;
+
+float4 _OutlineColor;
+float _OutlineWidth;
+float _ReceiveShadowMappingAmount;
+float _ReceiveShadowMappingPosOffset;
+CBUFFER_END
 sampler2D _MainTex;
-float4 _MainTex_ST;
 
 struct pmd_input
 {
@@ -43,7 +54,7 @@ v2f shadow_vert( pmd_input v )
 	v2f o;
 	VertexPositionInputs vertexInput = GetVertexPositionInputs(v.vertex);
 	o.pos = vertexInput.positionCS;
-	o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+	o.uv = v.texcoord;
 	return o;
 }
 

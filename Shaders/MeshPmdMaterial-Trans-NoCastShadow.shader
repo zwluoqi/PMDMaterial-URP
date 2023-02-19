@@ -19,8 +19,8 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 {
 	Properties
 	{
-		_Color("拡散色", Color) = (1,1,1,1)
-		_Opacity("不透明度", Float) = 1.0
+		[HDR]_Color("拡散色", Color) = (1,1,1,1)
+		_Opacity("不透明度", Range(0,1)) = 1.0
 		_SpecularColor("反射色", Color) = (1,1,1)
 		_AmbColor("環境色", Color) = (1,1,1)
 		_Shininess("反射強度", Float) = 0
@@ -28,6 +28,13 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 		_ToonTex("トゥーン", 2D) = "white" {}
 		_SphereAddTex("スフィア（加算）", 2D) = "black" {}
 		_SphereMulTex("スフィア（乗算）", 2D) = "white" {}
+		_Cutoff("_Cutoff",float) = 0.01
+		[Header(Shadow mapping)]
+        _ReceiveShadowMappingAmount("_ReceiveShadowMappingAmount", Range(0,1)) = 0.65
+        _ReceiveShadowMappingPosOffset("_ReceiveShadowMappingPosOffset", Range(0,1)) = 0
+        _ShadowMapColor("_ShadowMapColor", Color) = (1,0.825,0.78)
+		[Toggle(SELFSHADOW_ON)] SELFSHADOW_ON("SELF SHADOW_ON", Float) = 0
+
 	}
 
 	SubShader
@@ -43,8 +50,8 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 			Tags{"LightMode" = "UniversalForward"}
 
 				// Surface Shader
-				Cull Front
-				ZWrite Off
+				Cull Off
+				ZWrite On
 				Blend SrcAlpha OneMinusSrcAlpha
 //				AlphaTest Greater 0
 				HLSLPROGRAM
@@ -52,7 +59,7 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 
 				
 				#define _UseAlphaClipping
-				#define _Cutoff 0.01
+				
 				#pragma vertex vert_surf
 				#pragma fragment frag_fast
 
@@ -60,26 +67,6 @@ Shader "MMD/Transparent/PMDMaterial-NoCastShadow"
 				ENDHLSL
 		}
 
-		Pass{
-			Name "FORWARD2"
-//			Tags{"LightMode" = "UniversalForward"}
-
-			// Surface Shader
-			Cull Back
-			ZWrite On
-			Blend SrcAlpha OneMinusSrcAlpha
-//			AlphaTest Greater 0.25
-			HLSLPROGRAM
-			#include "LightingPragma.hlsl"
-
-			#define _UseAlphaClipping
-			#define _Cutoff 0.01
-			#pragma vertex vert_surf
-			#pragma fragment frag_fast
-
-			#include "MeshPmdMaterialSurface.hlsl"
-			ENDHLSL
-		}
 
 	}
 

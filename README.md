@@ -6,6 +6,9 @@ It's mostly used in these projects:
 [UnityPMXRuntimeLoader
 ](https://github.com/hobosore/UnityPMXRuntimeLoader)
 
+# Show
+![演示图](test.png)
+
 # Thanks
 The original version came from [MMD-Shader-for-Unity
 ](https://github.com/3dcgarts/MMD-Shader-for-Unity)  

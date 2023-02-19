@@ -15,5 +15,9 @@
 
 			
 
-#pragma multi_compile SELFSHADOW_OFF SELFSHADOW_ON
+#pragma multi_compile _ SELFSHADOW_ON
 #pragma multi_compile_fog
+#pragma multi_compile_fragment _ DEBUG_DISPLAY
+#pragma multi_compile_fragment _ _ALPHATEST_ON _ALPHABLEND_ON
+
+//forward 必须用cull back, 如果不这样做会有闪烁情况
